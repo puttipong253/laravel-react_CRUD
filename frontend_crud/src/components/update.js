@@ -1,7 +1,7 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import API from '../api'
 
-export default function Create(props) {
+export default function Update(props) {
 
     const [data, setData] = useState({
         firstname:"",
@@ -11,6 +11,15 @@ export default function Create(props) {
         phonenumber:""
     })
 
+    useEffect(() => {
+        const id = props.match.params.id
+        API.get(`api/customers/`+id)
+            .then(res =>{
+                console.log(res.data)
+                setData(res.data)
+            })
+    }, [props])
+
     const handle = (e) => {
         const newData = {...data}
         newData[e.target.name] = e.target.value
@@ -19,17 +28,18 @@ export default function Create(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        API.post(`api/customers/`, data)
+        const id = props.match.params.id
+        API.put(`api/customers/`+id,data)
             .then(res => {
                 console.log(res.data);
+                props.history.push("/")
             });
+        
     }
 
-    const onSubmitHome = (e) => {
-        props.history.push("/")
-    }
     return (
-        <form onSubmit={onSubmit}>
+        <div>
+           <form onSubmit={onSubmit}>
             <div>
             firstname 
                 <input type="text" value={data.firstname} name="firstname" onChange={handle}/>
@@ -48,10 +58,10 @@ export default function Create(props) {
             </div>
             <div>
             phonenumber 
-                <input type="number" value={data.phonenumber} name="phonenumber" onChange={handle}/>
+                <input type="number" value={data.phonenumber} name="phonenumber"  onChange={handle}/>
             </div>
             <button type="submit">submit</button>
-            <button type="submit" onClick={onSubmitHome}>home</button>
-        </form>
+        </form> 
+        </div>
     )
 }

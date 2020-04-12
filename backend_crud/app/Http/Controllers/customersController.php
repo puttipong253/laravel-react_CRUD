@@ -35,7 +35,7 @@ class customersController extends Controller
      */
     public function store(Request $request)
     {
-        $customer = new Customer();
+        $customer = new Customer;
         $customer->fill($request->all());
         $customer->save();
         return 'create suscessfully';
@@ -72,7 +72,7 @@ class customersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         $customer->fill($request->all());
         $customer->save();
         return 'update suscessfully';
@@ -86,7 +86,7 @@ class customersController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         $customer->destroy($id);
         return 'delete suscessfully';
     }
