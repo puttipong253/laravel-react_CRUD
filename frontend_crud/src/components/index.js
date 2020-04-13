@@ -1,25 +1,24 @@
-import React, {useState, useEffect} from 'react'
-import API from '../api'
+import React, { useState, useEffect } from 'react'
+import Axios from '../api'
 
 export default function Index(props) {
     
     const [data, setData] = useState([])
 
     useEffect(() => {
-        API.get(`api/customers/`)
+        Axios.get(`api/customers/`)
             .then(res =>{
-                const data = res.data;
-                setData(data)
+                setData(res.data)
             })
     }, [])
 
-    const handleOnclickEdit = (id) => {
+    const onUpdate = (id) => {
         console.log(id)
         props.history.push("/update/"+id)
     }
 
     const onRemove = (id) => {
-        API.delete(`api/customers/`+id)
+        Axios.delete(`api/customers/`+id)
         .then(res=>{
             console.log(res.data)
             const myData = data.filter(item=>item.id !== id)
@@ -27,19 +26,24 @@ export default function Index(props) {
         })
     }
 
+    const onCreate = () => {
+        props.history.push("/create/")
+    }
+
     return (
         <div>
             {data.map(data => (
-                <tr key={data.id}>
-                    <td>
-                        {data.firstname}
-                        <button onClick={()=>handleOnclickEdit(data.id)}>edit</button>
-                        <button onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(data.id)} }>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
+                <table>
+                    <tbody>
+                        <tr key={data.id}>
+                            <td>{data.firstname}</td>
+                            <td><button onClick={() => onUpdate(data.id)}>edit</button></td>
+                            <td><button onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(data.id)} }>Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             ))}
+            <button onClick={onCreate}>Create</button>
         </div>
     )
 }

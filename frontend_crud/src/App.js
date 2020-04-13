@@ -13,8 +13,8 @@ function App() {
     <div>
       <Router>
         <Route exact path="/" component={Index}/>
-        <Route exact path="/create" component={Create}/>
-        <Route exact path="/update/:id" component={Update}/>
+        <Route path="/create" component={Create}/>
+        <Route path="/update/:id" component={Update}/>
       </Router>
     </div>
   );

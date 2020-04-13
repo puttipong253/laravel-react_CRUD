@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import API from '../api'
+import Axios from '../api'
 
 export default function Update(props) {
 
@@ -13,7 +13,7 @@ export default function Update(props) {
 
     useEffect(() => {
         const id = props.match.params.id
-        API.get(`api/customers/`+id)
+        Axios.get(`api/customers/`+id)
             .then(res =>{
                 console.log(res.data)
                 setData(res.data)
@@ -29,39 +29,43 @@ export default function Update(props) {
     const onSubmit = (e) => {
         e.preventDefault();
         const id = props.match.params.id
-        API.put(`api/customers/`+id,data)
+        Axios.put(`api/customers/`+id,data)
             .then(res => {
                 console.log(res.data);
                 props.history.push("/")
             });
-        
+    }
+
+    const homePage = (e) => {
+        props.history.push("/")
     }
 
     return (
         <div>
            <form onSubmit={onSubmit}>
-            <div>
-            firstname 
+           <div>
+                <label htmlFor="firstname">ชื่อ </label> 
                 <input type="text" value={data.firstname} name="firstname" onChange={handle}/>
             </div>
             <div>
-            lastname 
+                <label htmlFor="lastname">นามสกุล </label>  
                 <input type="text" value={data.lastname} name="lastname" onChange={handle}/>
             </div>
             <div>
-            age 
+                <label htmlFor="age">อายุ </label> 
                 <input type="number" value={data.age} name="age" onChange={handle}/>
             </div>
             <div>
-            email 
+                <label htmlFor="email">อีเมล </label> 
                 <input type="email" value={data.email} name="email" onChange={handle}/>
             </div>
             <div>
-            phonenumber 
-                <input type="number" value={data.phonenumber} name="phonenumber"  onChange={handle}/>
+                <label htmlFor="phonenumber">เบอร์โทรศัพท์ </label> 
+                <input type="number" value={data.phonenumber} name="phonenumber" onChange={handle}/>
             </div>
-            <button type="submit">submit</button>
-        </form> 
+            <button type="submit">ตกลง</button>
+            <button type="submit" onClick={homePage}>กลับหน้าหลัก</button>
+        </form>
         </div>
     )
 }
