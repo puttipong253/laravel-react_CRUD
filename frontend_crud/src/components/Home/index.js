@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Axios from '../api'
+import Axios from '../../api'
 
-export default function Index(props) {
+import { Button } from './index.view'
+
+export default function Home(props) {
     
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
@@ -36,7 +38,7 @@ export default function Index(props) {
         <div>
             {loading ? ("Loading...") : (
                 <div>
-                    <table>
+                    <table width="100%" >
                         <thead>
                             <tr>
                                 <th>ชื่อ</th>
@@ -48,21 +50,21 @@ export default function Index(props) {
                                 <th>ลบ</th>
                             </tr>
                         </thead>
-                            {data.map(data => (
-                            <tbody>
-                                <tr key={data.id}>
-                                    <td>{data.firstname}</td>
-                                    <td>{data.lastname}</td>
-                                    <td>{data.age}</td>
-                                    <td>{data.email}</td>
-                                    <td>{data.phonenumber}</td>
-                                    <td><button onClick={() => onUpdate(data.id)}>edit</button></td>
+                            {data.map((item,i) => (
+                            <tbody key={i}>
+                                <tr>
+                                    <td>{item.firstname}</td>
+                                    <td>{item.lastname}</td>
+                                    <td>{item.age}</td>
+                                    <td>{item.email}</td>
+                                    <td>{item.phonenumber}</td>
+                                    <td><button onClick={() => onUpdate(item.id)}>edit</button></td>
                                     <td><button onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(data.id)} }>Delete</button></td>
                                 </tr>
                             </tbody>
                         ))}
                     </table>
-                    <button onClick={onCreate}>Create</button> 
+                    <Button onClick={onCreate}>Create</Button> 
                 </div>
             )}
         </div>

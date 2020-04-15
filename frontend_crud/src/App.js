@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Index from './components/index';
-import Create from './components/create';
-import Update from './components/update';
+import Home from './components/Home';
+import Create from './components/Create';
+import Update from './components/Update';
 import {
   BrowserRouter as Router,
   Route,
@@ -12,7 +12,7 @@ function App() {
   return (
     <div>
       <Router>
-        <Route exact path="/" component={Index}/>
+        <Route exact path="/" component={Home}/>
         <Route path="/create" component={Create}/>
         <Route path="/update/:id" component={Update}/>
       </Router>

@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import Axios from '../api'
+import Axios from '../../api'
 
 export default function Update(props) {
 

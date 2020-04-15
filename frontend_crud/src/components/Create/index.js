@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Axios from '../api'
+import Axios from '../../api'
 
 export default function Create(props) {
 
