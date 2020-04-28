@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import DataTable from 'react-data-table-component';
 import Axios from '../../api'
 
-import { Button } from './index.view'
+import { Button, DeleteButton, EditButton, Warpper } from './index.view'
 
 export default function Home(props) {
     
@@ -34,38 +35,53 @@ export default function Home(props) {
         props.history.push("/create/")
     }
 
+    const columns = [
+        {
+          name: 'ชื่อ',
+          selector: 'firstname',
+          sortable: true,
+        },
+        {
+          name: 'นามสกุล',
+          selector: 'lastname',
+          sortable: true,
+        },
+        {
+          name: 'อายุ',
+          selector: 'age',
+          sortable: true,
+        },
+        {
+          name: 'อีเมล',
+          selector: 'email',
+          sortable: true,
+        },
+        {
+          name: 'เบอร์โทรศัพท์',
+          selector: 'phonenumber',
+          sortable: true,
+        },
+        {
+          name: 'แก้ไข',
+          cell: row => <EditButton onClick={() => onUpdate(row.id)}>แก้ไข</EditButton>
+        },
+        {
+          name: 'ลบ',
+          cell: row => <DeleteButton onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(row.id)} }>ลบ</DeleteButton>
+        }
+      ];
+
     return (
         <div>
             {loading ? ("Loading...") : (
-                <div>
-                    <table width="100%" >
-                        <thead>
-                            <tr>
-                                <th>ชื่อ</th>
-                                <th>นามสกุล</th>
-                                <th>อายุ</th>
-                                <th>อีเมล</th>
-                                <th>เบอร์โทรศัพท์</th>
-                                <th>แก้ไข</th>
-                                <th>ลบ</th>
-                            </tr>
-                        </thead>
-                            {data.map((item,i) => (
-                            <tbody key={i}>
-                                <tr>
-                                    <td>{item.firstname}</td>
-                                    <td>{item.lastname}</td>
-                                    <td>{item.age}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.phonenumber}</td>
-                                    <td><button onClick={() => onUpdate(item.id)}>edit</button></td>
-                                    <td><button onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(data.id)} }>Delete</button></td>
-                                </tr>
-                            </tbody>
-                        ))}
-                    </table>
+                <Warpper>
+                    <DataTable
+                    title="Customer"
+                    columns={columns}
+                    data={data}
+                    />
                     <Button onClick={onCreate}>Create</Button> 
-                </div>
+                </Warpper>
             )}
         </div>
     )
