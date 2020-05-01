@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Home from './components/Home';
-import Create from './components/Create';
-import Update from './components/Update';
+import Home from './components/Menu/Home';
+import Create from './components/Menu/Create';
+import Update from './components/Menu/Update';
 import {
   BrowserRouter as Router,
   Route,

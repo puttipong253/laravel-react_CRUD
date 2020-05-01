@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import Axios from '../../api'
+import React,{useState, useEffect} from 'react'
+import Axios from '../../../api'
 
-export default function Create(props) {
+export default function Update(props) {
 
     const [data, setData] = useState({
         firstname:"",
@@ -11,6 +11,15 @@ export default function Create(props) {
         phonenumber:""
     })
 
+    useEffect(() => {
+        const id = props.match.params.id
+        Axios.get(`api/customers/`+id)
+            .then(res =>{
+                console.log(res.data)
+                setData(res.data)
+            })
+    }, [props])
+
     const handle = (e) => {
         const newData = {...data}
         newData[e.target.name] = e.target.value
@@ -19,10 +28,10 @@ export default function Create(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        Axios.post(`api/customers/`, data)
+        const id = props.match.params.id
+        Axios.put(`api/customers/`+id,data)
             .then(res => {
                 console.log(res.data);
-                alert("บันทึกข้อมูลเรียบร้อย");
                 props.history.push("/")
             });
     }
@@ -32,8 +41,9 @@ export default function Create(props) {
     }
 
     return (
-        <form onSubmit={onSubmit}>
-            <div>
+        <div>
+           <form onSubmit={onSubmit}>
+           <div>
                 <label htmlFor="firstname">ชื่อ </label> 
                 <input type="text" value={data.firstname} name="firstname" onChange={handle}/>
             </div>
@@ -56,5 +66,6 @@ export default function Create(props) {
             <button type="submit">ตกลง</button>
             <button type="submit" onClick={homePage}>กลับหน้าหลัก</button>
         </form>
+        </div>
     )
 }

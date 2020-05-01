@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
-import Axios from '../../api'
+import Axios from '../../../api'
 
 import { Button, DeleteButton, EditButton, Warpper } from './index.view'
 
 export default function Home(props) {
-    
+    console.log("d",props)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -63,10 +63,12 @@ export default function Home(props) {
         },
         {
           name: 'แก้ไข',
+          center: true,
           cell: row => <EditButton onClick={() => onUpdate(row.id)}>แก้ไข</EditButton>
         },
         {
           name: 'ลบ',
+          center: true,
           cell: row => <DeleteButton onClick={() => { if (window.confirm('Are you sure you want delete this item?')) onRemove(row.id)} }>ลบ</DeleteButton>
         }
       ];
