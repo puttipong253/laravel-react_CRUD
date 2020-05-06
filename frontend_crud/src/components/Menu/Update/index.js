@@ -3,35 +3,52 @@ import Axios from '../../../api'
 
 export default function Update(props) {
 
-    const [data, setData] = useState({
-        firstname:"",
-        lastname:"",
-        age:"",
-        email:"",
-        phonenumber:""
+    const [product, setProduct] = useState({
+        fishing_name:"",
+        type:"",
+        price:"",
     })
+
+    const [image, setImage] = useState(null)
 
     useEffect(() => {
         const id = props.match.params.id
-        Axios.get(`api/customers/`+id)
+        Axios.get(`product/`+id)
             .then(res =>{
                 console.log(res.data)
-                setData(res.data)
+                setProduct(res.data)
             })
     }, [props])
+    
+    const handleData = (e) => {
+        const newProduct = {...product}
+        newProduct[e.target.name] = e.target.value
+        setProduct(newProduct)
+    }
 
-    const handle = (e) => {
-        const newData = {...data}
-        newData[e.target.name] = e.target.value
-        setData(newData)
+    const handleImage = (e) => {
+        setImage(e.target.files[0])
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+        const formData = new FormData()
+        formData.append('fishing_name', product.fishing_name)
+        formData.append('type', product.type)
+        formData.append('price', product.price)
+        formData.append('image', image)
+        formData.append('_method', 'put');
+
         const id = props.match.params.id
-        Axios.put(`api/customers/`+id,data)
+        Axios.post(`product/`+id,formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then(res => {
-                console.log(res.data);
+                console.log(res);
+                alert("บันทึกข้อมูลเรียบร้อย");
                 props.history.push("/")
             });
     }
@@ -43,25 +60,21 @@ export default function Update(props) {
     return (
         <div>
            <form onSubmit={onSubmit}>
-           <div>
-                <label htmlFor="firstname">ชื่อ </label> 
-                <input type="text" value={data.firstname} name="firstname" onChange={handle}/>
+            <div>
+                <label htmlFor="name">ชื่อ </label> 
+                <input type="text" value={product.fishing_name} name="fishing_name" onChange={handleData}/>
             </div>
             <div>
-                <label htmlFor="lastname">นามสกุล </label>  
-                <input type="text" value={data.lastname} name="lastname" onChange={handle}/>
+                <label htmlFor="type">ประเภท </label>  
+                <input type="text" value={product.type} name="type" onChange={handleData}/>
             </div>
             <div>
-                <label htmlFor="age">อายุ </label> 
-                <input type="number" value={data.age} name="age" onChange={handle}/>
+                <label htmlFor="price">ราคา </label> 
+                <input type="number" value={product.price} name="price" onChange={handleData}/>
             </div>
             <div>
-                <label htmlFor="email">อีเมล </label> 
-                <input type="email" value={data.email} name="email" onChange={handle}/>
-            </div>
-            <div>
-                <label htmlFor="phonenumber">เบอร์โทรศัพท์ </label> 
-                <input type="number" value={data.phonenumber} name="phonenumber" onChange={handle}/>
+                <label htmlFor="image">รูปภาพ </label> 
+                <input type="file" name="image" onChange={handleImage}/>
             </div>
             <button type="submit">ตกลง</button>
             <button type="submit" onClick={homePage}>กลับหน้าหลัก</button>

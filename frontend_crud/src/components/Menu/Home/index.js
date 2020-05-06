@@ -5,29 +5,28 @@ import Axios from '../../../api'
 import { Button, DeleteButton, EditButton, Warpper } from './index.view'
 
 export default function Home(props) {
-    console.log("d",props)
-    const [data, setData] = useState([])
+
+    const [product, setProduct] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        Axios.get(`api/customers/`)
-            .then(res =>{
-                setData(res.data)
+        Axios.get(`product/`)
+            .then(res => {
+              setProduct(res.data)
                 setLoading(false)
             })
     }, [])
 
     const onUpdate = (id) => {
-        console.log(id)
         props.history.push("/update/"+id)
     }
 
     const onRemove = (id) => {
-        Axios.delete(`api/customers/`+id)
+        Axios.delete(`product/`+id)
         .then(res=>{
             console.log(res.data)
-            const myData = data.filter(item=>item.id !== id)
-            setData(myData)
+            const myPuduct = product.filter(item=>item.id !== id)
+            setProduct(myPuduct)
         })
     }
 
@@ -38,28 +37,23 @@ export default function Home(props) {
     const columns = [
         {
           name: 'ชื่อ',
-          selector: 'firstname',
+          selector: 'fishing_name',
           sortable: true,
         },
         {
-          name: 'นามสกุล',
-          selector: 'lastname',
+          name: 'ประเภท',
+          selector: 'type',
           sortable: true,
         },
         {
-          name: 'อายุ',
-          selector: 'age',
+          name: 'ราคา',
+          selector: 'price',
           sortable: true,
         },
         {
-          name: 'อีเมล',
-          selector: 'email',
-          sortable: true,
-        },
-        {
-          name: 'เบอร์โทรศัพท์',
-          selector: 'phonenumber',
-          sortable: true,
+          name: 'รูปภาพ',
+          cell: row => (<img src={"http://127.0.0.1:8000/storage/"+row.image} alt={row.id} width="80px" />),
+          center: true,
         },
         {
           name: 'แก้ไข',
@@ -80,7 +74,7 @@ export default function Home(props) {
                     <DataTable
                     title="Customer"
                     columns={columns}
-                    data={data}
+                    data={product}
                     />
                     <Button onClick={onCreate}>Create</Button> 
                 </Warpper>
