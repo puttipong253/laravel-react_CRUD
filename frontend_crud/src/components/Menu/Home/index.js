@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import Axios from '../../../api'
+import Axios from '../../../api';
 
 import { Button, DeleteButton, EditButton, Warpper } from './index.view'
 
 export default function Home(props) {
-
     const [product, setProduct] = useState([])
     const [loading, setLoading] = useState(true)
-
+    const token = localStorage.getItem('access_token');
+    
     useEffect(() => {
+      if (token) {
         Axios.get(`product/`)
             .then(res => {
               setProduct(res.data)
-                setLoading(false)
+              setLoading(false)
             })
-    }, [])
+      }else{
+        props.history.push('/login')
+      }
+        
+    }, [token,props])
 
     const onUpdate = (id) => {
         props.history.push("/update/"+id)
@@ -25,14 +30,19 @@ export default function Home(props) {
         Axios.delete(`product/`+id)
         .then(res=>{
             console.log(res.data)
-            const myPuduct = product.filter(item=>item.id !== id)
-            setProduct(myPuduct)
+            const myProduct = product.filter(item=>item.id !== id)
+            setProduct(myProduct)
         })
     }
 
     const onCreate = () => {
         props.history.push("/create/")
     }
+
+    const onLogout = () => {
+      localStorage.removeItem('access_token')
+      props.history.push("/login")
+  }
 
     const columns = [
         {
@@ -77,6 +87,7 @@ export default function Home(props) {
                     data={product}
                     />
                     <Button onClick={onCreate}>Create</Button> 
+                    <Button onClick={onLogout}>Logout</Button> 
                 </Warpper>
             )}
         </div>
